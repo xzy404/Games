@@ -1,0 +1,96 @@
+{# UNO 牌桌骨架。动态内容全部由 /uno.js 填充，这里只给出结构与样式钩子。 #}
+<div class="hg-board" data-board>
+  <div class="hg-board__bar">
+    <span class="hg-board__item">{{ _('房间') }} <b data-room-code>------</b></span>
+    <span class="hg-board__item hg-dim" data-room-status></span>
+    <span class="hg-board__item" data-dir></span>
+    <span class="hg-board__item" data-color></span>
+    <span class="hg-board__item hg-dim" data-deck></span>
+    <span class="hg-board__timer" data-timer>
+      <i data-timer-bar></i><em data-timer-text></em>
+    </span>
+  </div>
+
+  <div class="hg-felt hg-felt--uno">
+    <div class="hg-seat" data-side="L">
+      <div class="hg-seat__head">
+        <span class="hg-seat__name" data-seat-name>—</span>
+      </div>
+      <div class="hg-seat__count" data-seat-count></div>
+      <div class="hg-seat__tag" data-seat-tag></div>
+      <div class="hg-played" data-seat-played></div>
+    </div>
+
+    <div class="hg-felt__center">
+      {# 上家单独占一行：UNO 是 4 人桌，L / 中 / R 三列放不下四个人 #}
+      <div class="hg-seat hg-seat--top" data-side="T">
+        <div class="hg-seat__head">
+          <span class="hg-seat__name" data-seat-name>—</span>
+        </div>
+        <div class="hg-seat__count" data-seat-count></div>
+        <div class="hg-seat__tag" data-seat-tag></div>
+        <div class="hg-played" data-seat-played></div>
+      </div>
+
+      <div class="hg-uno-table" data-table>
+        <div class="hg-uno-pile" data-pile-draw>
+          <span class="hg-dim">{{ _('摸牌堆') }}</span>
+        </div>
+        <div class="hg-uno-pile hg-uno-pile--top" data-pile-top>
+          <span class="hg-dim">{{ _('牌面') }}</span>
+        </div>
+      </div>
+      <div class="hg-log" data-log></div>
+    </div>
+
+    <div class="hg-seat" data-side="R">
+      <div class="hg-seat__head">
+        <span class="hg-seat__name" data-seat-name>—</span>
+      </div>
+      <div class="hg-seat__count" data-seat-count></div>
+      <div class="hg-seat__tag" data-seat-tag></div>
+      <div class="hg-played" data-seat-played></div>
+    </div>
+  </div>
+
+  <div class="hg-me">
+    <div class="hg-me__head">
+      <span class="hg-me__name" data-me-name>{{ _('我') }}</span>
+      <span class="hg-dim" data-me-tag></span>
+    </div>
+    <div class="hg-hand" data-hand></div>
+    <div class="hg-controls">
+      <div class="hg-playbox" data-play hidden>
+        <button class="hg-btn hg-btn--ghost" data-act="clear">{{ _('重选') }}</button>
+        <button class="hg-btn hg-btn--ghost" data-act="draw">{{ _('摸一张') }}</button>
+        <button class="hg-btn hg-btn--ghost" data-act="pass">{{ _('过') }}</button>
+        <button class="hg-btn hg-btn--primary" data-act="play">{{ _('出牌') }}</button>
+      </div>
+      {# 打万能牌时才需要选色；点「出牌」先弹这一行，选完颜色才真的发请求 #}
+      <div class="hg-colorbox" data-colorbox hidden>
+        <span class="hg-dim">{{ _('指定颜色') }}</span>
+        <button class="hg-color hg-color--r" data-color="0">{{ _('红') }}</button>
+        <button class="hg-color hg-color--y" data-color="1">{{ _('黄') }}</button>
+        <button class="hg-color hg-color--g" data-color="2">{{ _('绿') }}</button>
+        <button class="hg-color hg-color--b" data-color="3">{{ _('蓝') }}</button>
+      </div>
+      <div class="hg-idlebox" data-idle hidden>
+        <span class="hg-dim" data-idle-text></span>
+      </div>
+    </div>
+
+    {# 托管按钮独立成一行，不跟着上面的操作区切换：
+       轮到你出牌时 idle 会被藏起来，而托管恰恰是这时候才需要取消 ——
+       放进那几块里就再也找不到「取消托管」的入口了。 #}
+    <div class="hg-autobar" data-autobar hidden>
+      <button class="hg-btn hg-btn--ghost hg-btn--sm" data-act="toggle-auto"></button>
+      <span class="hg-dim" data-auto-hint></span>
+    </div>
+  </div>
+
+  {# 已结束对局的回放：三步之外全由 JS 画，这里只给容器 #}
+  <div class="hg-replay" data-replay hidden></div>
+
+  <div class="hg-result" data-result hidden></div>
+  <div class="hg-toast" data-toast hidden></div>
+</div>

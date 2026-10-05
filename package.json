@@ -1,0 +1,11 @@
+{
+  "name": "hydro-games",
+  "version": "0.5.3",
+  "description": "Hydro OJ 游戏大全插件：/games 游戏列表 + /games/<游戏> 游戏页（内置斗地主与 UNO）",
+  "main": "index.ts",
+  "license": "MIT",
+  "private": true,
+  "peerDependencies": {
+    "hydrooj": "*"
+  }
+}

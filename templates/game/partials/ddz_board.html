@@ -1,0 +1,82 @@
+{# 斗地主牌桌骨架。动态内容全部由 /ddz.js 填充，这里只给出结构与样式钩子。 #}
+<div class="hg-board" data-board>
+  <div class="hg-board__bar">
+    <span class="hg-board__item">{{ _('房间') }} <b data-room-code>------</b></span>
+    <span class="hg-board__item hg-dim" data-room-status></span>
+    <span class="hg-board__item" data-bet></span>
+    <span class="hg-board__item" data-multiplier></span>
+    <span class="hg-board__timer" data-timer>
+      <i data-timer-bar></i><em data-timer-text></em>
+    </span>
+  </div>
+
+  <div class="hg-felt">
+    <div class="hg-seat" data-side="L">
+      <div class="hg-seat__head">
+        <span class="hg-role" data-seat-role></span>
+        <span class="hg-seat__name" data-seat-name>—</span>
+      </div>
+      <div class="hg-seat__count" data-seat-count></div>
+      <div class="hg-seat__tag" data-seat-tag></div>
+      <div class="hg-played" data-seat-played></div>
+    </div>
+
+    <div class="hg-felt__center">
+      <div class="hg-bottom" data-bottom>
+        <span class="hg-dim">{{ _('底牌') }}</span>
+      </div>
+      <div class="hg-table" data-table></div>
+      <div class="hg-log" data-log></div>
+    </div>
+
+    <div class="hg-seat" data-side="R">
+      <div class="hg-seat__head">
+        <span class="hg-role" data-seat-role></span>
+        <span class="hg-seat__name" data-seat-name>—</span>
+      </div>
+      <div class="hg-seat__count" data-seat-count></div>
+      <div class="hg-seat__tag" data-seat-tag></div>
+      <div class="hg-played" data-seat-played></div>
+    </div>
+  </div>
+
+  <div class="hg-me">
+    <div class="hg-me__head">
+      <span class="hg-role" data-me-role></span>
+      <span class="hg-me__name" data-me-name>{{ _('我') }}</span>
+      <span class="hg-dim" data-me-tag></span>
+    </div>
+    <div class="hg-hand" data-hand></div>
+    <div class="hg-controls">
+      <div class="hg-bidbox" data-bid hidden>
+        <button class="hg-btn hg-btn--ghost" data-bid-score="0">{{ _('不叫') }}</button>
+        <button class="hg-btn" data-bid-score="1">1 {{ _('分') }}</button>
+        <button class="hg-btn" data-bid-score="2">2 {{ _('分') }}</button>
+        <button class="hg-btn" data-bid-score="3">3 {{ _('分') }}</button>
+      </div>
+      <div class="hg-playbox" data-play hidden>
+        <button class="hg-btn hg-btn--ghost" data-act="clear">{{ _('重选') }}</button>
+        <button class="hg-btn hg-btn--ghost" data-act="hint">{{ _('提示') }}</button>
+        <button class="hg-btn hg-btn--ghost" data-act="pass">{{ _('不出') }}</button>
+        <button class="hg-btn hg-btn--primary" data-act="play">{{ _('出牌') }}</button>
+      </div>
+      <div class="hg-idlebox" data-idle hidden>
+        <span class="hg-dim" data-idle-text></span>
+      </div>
+    </div>
+
+    {# 托管按钮独立成一行，不跟着上面的操作区切换：
+       轮到你出牌时 idle 会被藏起来，而托管恰恰是这时候才需要取消 ——
+       放进那三块里就再也找不到「取消托管」的入口了。 #}
+    <div class="hg-autobar" data-autobar hidden>
+      <button class="hg-btn hg-btn--ghost hg-btn--sm" data-act="toggle-auto"></button>
+      <span class="hg-dim" data-auto-hint></span>
+    </div>
+  </div>
+
+  {# 已结束对局的回放：三步之外全由 JS 画，这里只给容器 #}
+  <div class="hg-replay" data-replay hidden></div>
+
+  <div class="hg-result" data-result hidden></div>
+  <div class="hg-toast" data-toast hidden></div>
+</div>

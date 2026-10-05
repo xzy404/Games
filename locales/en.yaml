@@ -1,0 +1,57 @@
+# hydro-games / English
+#
+# 模板里的字符串用的是中文原文（这样即使 i18n 整个失效，中文站点也不会露出
+# `game_ddz` 这种裸 key），所以这里以中文原文为 key 提供英文翻译。
+'game_main': Games
+'game_ddz': Doudizhu
+'game_status': Game status
+'setting_games': Games
+
+'除了刷题，也可以在这里和同学（或者机器人）打两局。点开任意一款即可开始。': >-
+  Take a break from problems and play a round with classmates (or bots).
+  Click any game below to start.
+'管理员暂时关闭了游戏功能，页面仍可浏览，但无法开始对局。': >-
+  Games are currently disabled by the administrator. You can still browse this page,
+  but new matches cannot start.
+'未登录可以围观，开始对局需要先': You can watch while logged out, but starting a match requires
+'人在线': players online
+'桌进行中': tables in play
+'人排队': in queue
+'进入': Enter
+'后续会陆续加入更多小游戏，有想玩的可以在讨论区留言。': >-
+  More mini games will be added over time — leave a note in the discussion area
+  if there is one you would like to see.
+'管理员暂时关闭了游戏功能。': Games are currently disabled by the administrator.
+'匹配': Matchmaking
+'我的战绩': My stats
+'玩法说明': How to play
+'最近对局': Recent matches
+'刷新': Refresh
+'匹配与牌桌需要开启 JavaScript。': Matchmaking and the table need JavaScript.
+'正在载入大厅…': Loading lobby…
+'正在载入…': Loading…
+'房间': Room
+'底牌': Bottom cards
+'我': Me
+'不叫': Pass
+'分': pts
+'重选': Clear
+'提示': Hint
+'不出': Pass
+'出牌': Play
+'game_ddz_room': Doudizhu
+'返回大厅': Back to lobby
+'房间不存在或已结束': Room not found or already finished
+
+# ── UNO ──────────────────────────────────────────────────────────
+'game_uno': UNO
+'game_uno_room': UNO
+'摸牌堆': Draw pile
+'牌面': Discard pile
+'摸一张': Draw
+'过': Pass
+'指定颜色': Choose a colour
+'红': Red
+'黄': Yellow
+'绿': Green
+'蓝': Blue

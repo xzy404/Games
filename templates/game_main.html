@@ -1,0 +1,41 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row"><div class="medium-12 columns hg-wrap">
+  <div class="hg-hero">
+    <div class="hg-hero__icon">{{ games[0].glyph if games.length else '♠' }}</div>
+    <div class="hg-hero__text">
+      <h1>{{ _('game_main') }}</h1>
+      <p>{{ _('除了刷题，也可以在这里和同学（或者机器人）打两局。点开任意一款即可开始。') }}</p>
+    </div>
+  </div>
+
+  {% if not enabled %}
+  <blockquote class="warn">{{ _('管理员暂时关闭了游戏功能，页面仍可浏览，但无法开始对局。') }}</blockquote>
+  {% endif %}
+
+  {% if not loggedIn %}
+  <blockquote class="note">{{ _('未登录可以围观，开始对局需要先') }}<a href="{{ url('user_login') }}">{{ _('Login') }}</a>。</blockquote>
+  {% endif %}
+
+  <div class="hg-grid">
+    {% for g in games %}
+    <a class="hg-tile" href="{{ url(g.route) }}" style="--hg-accent: {{ g.accent }}">
+      <div class="hg-tile__glyph">{{ g.glyph }}</div>
+      <div class="hg-tile__body">
+        <div class="hg-tile__title">{{ _(g.route) }}</div>
+        <div class="hg-tile__tagline">{{ g.tagline }}</div>
+        <div class="hg-tile__meta">
+          <span class="hg-chip">{{ g.players }}</span>
+          <span class="hg-chip hg-chip--live">{{ g.summary.online }} {{ _('人在线') }}</span>
+          <span class="hg-chip">{{ g.summary.rooms }} {{ _('桌进行中') }}</span>
+          {% if g.summary.queue %}<span class="hg-chip">{{ g.summary.queue }} {{ _('人排队') }}</span>{% endif %}
+        </div>
+      </div>
+      <div class="hg-tile__go">{{ _('进入') }} →</div>
+    </a>
+    {% endfor %}
+  </div>
+
+  <div class="hg-note">{{ _('后续会陆续加入更多小游戏，有想玩的可以在讨论区留言。') }}</div>
+</div></div>
+{% endblock %}

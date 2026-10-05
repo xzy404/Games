@@ -1,0 +1,99 @@
+{# UNO 页面。**一个模板两种形态**，靠 `inRoomPage` 分开：
+     · 大厅页 /games/uno          → 游戏信息 + 匹配 + 战绩 + 玩法说明 + 最近对局，不画牌桌
+     · 房间页 /games/uno/room/xxx → 只有牌桌
+
+   为什么不做成两个模板文件：独立的房间页模板意味着「部署时多一个新增文件要传」，
+   漏传一次线上就是 500（`Cannot get template ...`）。少一个文件，少一类事故。 #}
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row"><div class="medium-12 columns hg-wrap{% if inRoomPage %} hg-wrap--room{% endif %}" id="hg-app"
+     data-gid="{{ game.id }}" data-api="{{ gdata.api }}" data-logged-in="{{ 1 if gdata.loggedIn else 0 }}"
+     style="--hg-accent: {{ game.accent }}">
+
+{% if inRoomPage %}
+  {# ── 房间页：只有牌桌 ───────────────────────────────────────── #}
+  <div class="hg-room-head">
+    {# 相对路径：/games/uno/room/ABC 的 .. 就是 /games/uno，带 /d/<domain> 前缀时同样成立 #}
+    <a class="hg-btn hg-btn--ghost hg-btn--sm" href="..">{{ _('返回大厅') }}</a>
+    <span class="hg-dim">{{ _(game.route) }} · {{ _('房间') }}</span>
+  </div>
+
+  <div class="hg-empty" data-noroom hidden>{{ _('房间不存在或已结束') }}</div>
+{% else %}
+  {# ── 大厅页上半：游戏信息 + 匹配 + 战绩 ─────────────────────── #}
+  <div class="hg-hero hg-hero--game">
+    <div class="hg-hero__icon">{{ game.glyph }}</div>
+    <div class="hg-hero__text">
+      <h1>{{ _(game.route) }}</h1>
+      <p>{{ game.tagline }}</p>
+    </div>
+    <div class="hg-hero__badges">
+      <span class="hg-chip">{{ game.players }}</span>
+      <span class="hg-chip hg-chip--live" data-live-online>{{ lobby.summary.online }} {{ _('人在线') }}</span>
+      <span class="hg-chip" data-live-rooms>{{ lobby.summary.rooms }} {{ _('桌进行中') }}</span>
+    </div>
+  </div>
+
+  {% if not lobby.config.enabled %}
+  <blockquote class="warn">{{ _('管理员暂时关闭了游戏功能。') }}</blockquote>
+  {% endif %}
+
+  <div class="hg-top">
+    <div class="section hg-panel hg-panel--lobby">
+      <div class="section__header"><h2>{{ _('匹配') }}</h2></div>
+      <div class="section__body" data-lobby>
+        <noscript><p class="hg-dim">{{ _('匹配与牌桌需要开启 JavaScript。') }}</p></noscript>
+        <div class="hg-skeleton">{{ _('正在载入大厅…') }}</div>
+      </div>
+    </div>
+
+    <div class="section hg-panel hg-panel--stat">
+      <div class="section__header"><h2>{{ _('我的战绩') }}</h2></div>
+      <div class="section__body" data-stat>
+        <div class="hg-skeleton">—</div>
+      </div>
+    </div>
+  </div>
+
+  {# 玩法说明单独占一行，放在匹配与战绩下面 #}
+  <div class="section hg-panel hg-panel--rules">
+    <div class="section__header"><h2>{{ _('玩法说明') }}</h2></div>
+    <div class="section__body">
+      <ol class="hg-rules">
+        {% for r in game.rules %}<li>{{ r }}</li>{% endfor %}
+      </ol>
+      <ul class="hg-tips">
+        {% for t in game.tips %}<li>{{ t }}</li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}
+
+  {# 牌桌：大厅页先收起（要点了练习/匹配才展开），房间页直接就位。
+     房间号不存在时也不画 —— 那种情况只需要「房间不存在或已结束」那一句。 #}
+  <div class="section hg-board-section" data-board-section{% if not inRoomPage or not room %} hidden{% endif %}>
+    {% include game.boardTemplate %}
+  </div>
+
+{% if not inRoomPage %}
+  {# ── 大厅页下半：最近对局 ───────────────────────────────────── #}
+  <div class="section hg-panel hg-panel--recent">
+    <div class="section__header">
+      <h2>{{ _('最近对局') }}</h2>
+      <span class="hg-dim hg-refresh" data-recent-refresh>{{ _('刷新') }}</span>
+    </div>
+    <div class="section__body no-padding" data-recent>
+      <div class="hg-skeleton">{{ _('正在载入…') }}</div>
+    </div>
+  </div>
+{% endif %}
+</div></div>
+{% endblock %}
+
+{% block script %}
+{# 必须用单引号包起来再交给 jsesc：jsesc 的脚本上下文转义只负责 `</script>`、反斜杠和
+   行分隔符，不会转义 `"`。裸写 JSON 时只要有个用户名带 `"` 或 `\`，整段脚本就是语法错误。
+   这与 ui-default 的 layout/html5.html 内嵌 UiContext 的写法一致。 #}
+<script>window.HgData = '{{ hgData|json|jsesc|safe }}';</script>
+<script src="/{{ game.script }}?v={{ assetVersion }}"></script>
+{% endblock %}
